@@ -132,15 +132,6 @@ async function fetchTracks() {
     const raw = data.tracks || data;
 
     const normalized = [];
-    let skipped = 0;
-
-    raw.forEach((t, idx) => {
-      const url = (t.url || t.link || "").toString().trim();
-      if (!url) {
-        console.warn(`Track ${idx} skipped - no URL found`);
-        skipped++;
-        return; // ignore entries with no playable URL
-      }
 
       const title = (t.title || "Untitled").toString();
       const artist = (t.artist || "Unknown artist").toString();
@@ -159,13 +150,9 @@ async function fetchTracks() {
         url: url,                // preserve original field name if used elsewhere
         link: url                // legacy field name fallback
       });
-    });
 
     state.tracks = normalized;
 
-    console.log(
-      `Symphonia loaded tracks from Nuvi: ${state.tracks.length} (skipped ${skipped} invalid entries)`
-    );
     
     // Debug: log first track to verify src is set
     if (state.tracks.length > 0) {
